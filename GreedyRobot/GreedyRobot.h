@@ -21,7 +21,7 @@ public:
 	int getGoalX() const;
 	int getGoalY() const;
 
-	void shortestPaths(int x, int y, string pathName, int directionCounter);
+	void shortestPaths(int x, int y, string pathName, int pathLength);
 
 
 	static const int MAX_NUM_SAME_DIRECTION = 2;
@@ -36,10 +36,6 @@ private:
 	int pathLength = 0;
 	int pathCount = 0;
 
-	void moveRobotNorth(int x, int y, string pathName, int directionCounter);
-	void moveRobotSouth(int x, int y, string pathName, int directionCounter);
-	void moveRobotEast(int x, int y, string pathName, int directionCounter);
-	void moveRobotWest(int x, int y, string pathName, int directionCounter);
 };
 
 #endif // !GREEDYROBOT_H
