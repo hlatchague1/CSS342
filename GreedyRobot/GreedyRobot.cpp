@@ -48,6 +48,26 @@ int GreedyRobot::getGoalY() const
 	return goalY;
 }
 
+void GreedyRobot::moveRobotNorth(int startX, int startY, string pathName, int pathLength)
+{
+	return shortestPaths(startX, (startY + 1), pathName + 'N', pathLength + 1);
+}
+
+void GreedyRobot::moveRobotSouth(int startX, int startY, string pathName, int pathLength)
+{
+	return shortestPaths(startX, (startY - 1), pathName + 'S', pathLength + 1);
+}
+
+void GreedyRobot::moveRobotEast(int startX, int startY, string pathName, int pathLength)
+{
+	return shortestPaths((startX + 1), startY, pathName + 'E', pathLength + 1);
+}
+
+void GreedyRobot::moveRobotWest(int startX, int startY, string pathName, int pathLength)
+{
+	return shortestPaths((startX - 1), startY, pathName + 'W', pathLength + 1);
+}
+
 void GreedyRobot::shortestPaths(int startX, int startY, string pathName, int pathLength)
 {
 	if (startX == goalX && startY == goalY)
@@ -58,6 +78,52 @@ void GreedyRobot::shortestPaths(int startX, int startY, string pathName, int pat
 	}
 	else
 	{
+		// Robot = south of treasure
+		if (startY < goalY)
+		{
+			// Robot = west of treasure
+			if (startX < goalX)
+			{
+				moveRobotEast(startX, startY,pathName, pathLength);
+			}
+			// Robot = east of treasure
+			else
+			{
+				moveRobotWest(startX, startY, pathName, pathLength);
+			}
+
+			moveRobotNorth(startX, startY, pathName, pathLength);
+		}
+		// Robot = north of treasure
+		else
+		{
+			// Robot = west of treasure
+			if (startX < goalX)
+			{
+				moveRobotEast(startX, startY, pathName, pathLength);
+			}
+			// Robot = east of treasure
+			else
+			{
+				moveRobotWest(startX, startY, pathName, pathLength);
+			}
+
+			moveRobotSouth(startX, startY, pathName, pathLength);
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		// Robot is South of Treasure
 		/*if (startX < goalX)
 		{
@@ -120,8 +186,4 @@ void GreedyRobot::shortestPaths(int startX, int startY, string pathName, int pat
 	}
 }
 
-//void GreedyRobot::moveRobotNorth(int startX, int startY, string pathName, int pathLength)
-//{
-//	return shortestPaths(startX, startY + 1, pathName + 'N', pathLength + 1);
-//}
 

@@ -37,6 +37,9 @@ private:
 	int pathCount = 0;
 
 	void moveRobotNorth(int x, int y, string pathName, int directionCounter);
+	void moveRobotSouth(int x, int y, string pathName, int directionCounter);
+	void moveRobotEast(int x, int y, string pathName, int directionCounter);
+	void moveRobotWest(int x, int y, string pathName, int directionCounter);
 };
 
 #endif // !GREEDYROBOT_H
