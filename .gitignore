@@ -3,3 +3,8 @@
 ################################################################################
 
 /.vs
+/GreedyRobot/.vs/GreedyRobot/v16
+/GreedyRobot/GreedyRobot.vcxproj.filters
+/GreedyRobot/GreedyRobot.vcxproj.user
+/GreedyRobot/GreedyRobot.vcxproj
+/GreedyRobot/GreedyRobot.sln
