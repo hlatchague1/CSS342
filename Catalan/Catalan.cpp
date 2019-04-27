@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 	}
 	else
 	{
-		cout << "Argument must be <= 0." << endl;
+		cout << "Catalan does not take negative input." << endl;
 	}
 }
 
@@ -31,15 +31,8 @@ int Catalan(int n)
 	// long int to support larger catalan #s
 	long int number = 0;
 
-	// invalid entry
-	if (n < 0)
-	{
-		cerr << "Invalid input! Please enter a positive number." << endl;
-		exit(1);
-	}
-
 	// base case
-	if (n <= 1)
+	if (n == 1 || n == 0)
 	{
 		return 1;
 	}
