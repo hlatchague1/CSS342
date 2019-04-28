@@ -5,6 +5,7 @@ using namespace std;
 // prototype
 int Catalan(int n);
 
+// command line arguments added
 int main(int argc, char* argv[])
 {
 	if (argc != 3)
