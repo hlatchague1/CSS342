@@ -33,3 +33,5 @@
 /Pointers/Pointers.vcxproj
 /Pointers/Pointers.vcxproj.filters
 /Pointers/Pointers.vcxproj.user
+/Bird/bird.cpp
+/Bird/bird.h
