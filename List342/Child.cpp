@@ -144,6 +144,38 @@ bool Child::operator>(const Child& rhs) const
 	}
 }
 
+bool Child::operator>=(const Child& rhs)const
+{
+	if (this->firstName == rhs.lastName && firstName == this->firstName && age == this->age)
+	{
+		return true;
+	}
+	else if (*this > rhs)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool Child::operator<=(const Child& rhs)const
+{
+	if (this->firstName == rhs.lastName && firstName == this->firstName && age == this->age)
+	{
+		return true;
+	}
+	else if (*this < rhs)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 ostream& operator<<(ostream& output, const Child& childOutput)
 {
 	output << childOutput.getFirstName() << childOutput.getLastName() << childOutput.getAge();

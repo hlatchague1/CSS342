@@ -31,6 +31,8 @@ public:
 	bool operator != (const Child& rhs) const;
 	bool operator < (const Child& rhs) const;
 	bool operator > (const Child& rhs) const;
+	bool operator>=(const Child& rhs)const;
+	bool operator<=(const Child& rhs)const;
 
 
 	// friend overloaded operators (cin/cout)
