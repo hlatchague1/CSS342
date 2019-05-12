@@ -1,5 +1,3 @@
-#pragma once
-
 #ifndef LIST342_H
 #define LIST342_H
 
@@ -13,7 +11,7 @@ using namespace std;
 template <class ItemType>
 class List342
 {
-
+	// overloads "cout" operator
 	friend ostream& operator<< (ostream& output, const List342<ItemType>& outputList)
 	{
 		Node* traversingNode = outputList.headPtr;
@@ -34,27 +32,30 @@ class List342
 	}
 
 public:
+	// constructors
 	List342();
 	List342(string fileName);
 	List342(const List342& rhs); //copy constructor
-	~List342();
 
-	int getItemCount();
-		
+	// destructor
+	~List342() { this->DeleteList(); }
+	
+	// actions
 	bool BuildList(string fileName);
 	bool Insert(ItemType* obj);
-	//bool Remove(ItemType target, ItemType& result);
-	//bool Peek(ItemType target, ItemType& result) const;
+	bool Remove(ItemType target, ItemType& result);
+	bool Peek(ItemType target, ItemType& result) const;
 	bool isEmpty() const;
 
 	void DeleteList();
 	bool Merge(List342& list1);
 
-	//List342 operator+(const List342& rhs);
-	//List342 operator+=(const List342& rhs);
+	// overloaded operators
+	List342 operator+(const List342& rhs);
+	List342 operator+=(const List342& rhs);
 	bool operator==(const List342& rhs);
 	bool operator!=(const List342& rhs);
-	//List342 operator=(const List342& rhs);
+	void operator=(const List342& rhs);
 
 private:
 	struct Node
@@ -63,23 +64,24 @@ private:
 		Node* next = nullptr;
 	};
 	Node* headPtr = nullptr;
-	int itemCount = 0;
 };
 
+// constructor
 template <class ItemType>
 List342<ItemType>::List342()
 {
 	headPtr = nullptr;
-	itemCount = 0;
 
 }
 
+// constructor
 template <class ItemType>
 List342<ItemType>::List342(string fileName)
 {
 	BuildList(fileName);
 }
 
+// copy constructor
 template<class ItemType>
 List342<ItemType>::List342(const List342<ItemType>& otherList)
 {
@@ -87,19 +89,7 @@ List342<ItemType>::List342(const List342<ItemType>& otherList)
 	*this = otherList;
 }
 
-template <class ItemType>
-List342<ItemType>::~List342()
-{
-	this->DeleteList();
-
-}
-
-template <class ItemType>
-int List342<ItemType>::getItemCount()
-{
-	return itemCount;
-}
-
+// builds list from file of string
 template <class ItemType>
 bool List342<ItemType>::BuildList(string fileName)
 {
@@ -107,106 +97,132 @@ bool List342<ItemType>::BuildList(string fileName)
 	inFile.open(fileName);
 	while (!inFile.eof())
 	{
-		string* temp = this->next; // maybe itemtype
+		ItemType* temp = new ItemType();
 		inFile >> *temp;
 		Insert(temp);
+	}
+	return true;
+}
+
+// inserts item in increasing order
+template <class ItemType>
+bool List342<ItemType>::Insert(ItemType* obj)
+{
+	Node* temp = new Node;
+	Node* current;
+	Node* previous;
+
+	temp->data = new ItemType(*obj);
+
+	if (temp == nullptr)
+	{	
+		return false;
+	}
+	if (!headPtr)
+	{
+		headPtr = temp;			
+		return true;
+	}
+
+	if (*temp->data < *headPtr->data)
+	{
+		temp->next = headPtr;
+		headPtr = temp;
+		return true;
+	}
+
+	current = headPtr->next;		
+	previous = headPtr;
+	   
+	while (current)
+	{		
+		if (*temp->data < *current->data)
+		{
+			temp->next = current;				
+			previous->next = temp;
+			return true;
+		}
+		else if (*temp->data == *current->data)
+		{
+			temp = nullptr;
+			delete temp;
+			return false;
+		}
+		previous = current;			
+		current = current->next;
+	}
+
+	if (previous)
+	{
+		previous->next = temp;
 		return true;
 	}
 	return false;
 }
 
+// Remove the target item from the list. 
+// Return the item using a second parameter that is passed in by reference.
 template <class ItemType>
-bool List342<ItemType>::Insert(ItemType* obj)
+bool List342<ItemType>::Remove(ItemType target, ItemType& result)
 {
-	//Node* newNode = new Node;
-	//newNode->data = obj;
-	//ItemType* temp;
-	//if (headPtr == nullptr)
-	//{
-	//	headPtr = newNode;
-	//	newNode.next = nullptr;
-	//	return true;
-	//}
-	////if (*hearPtr == *newNode.data)
-	////{
-	////	return false;
-	////}
-	//else if (headPtr->data > newNode->data)
-	//{
-	//	newNode.next = headPtr;
-	//	headPtr = newNode;
-	//	return true;
-	//}
-	//else
-	//{
-	//	Node* traversingNode = headPtr;
-	//	while ((traversingNode.next != nullptr) && (newNode->data < traversingNode->data))
-	//	{
-	//		traversingNode = traversingNode.next;
-	//	}
-	//	temp = traversingNode.data;
-	//	traversingNode.next = newNode.data;
-	//	newNode.next = *temp;
-	//	return true;
-	//}
-	//return false;
+	Node* current;
+	Node* previous;
 
-
-	if (obj == nullptr || ((headPtr != nullptr) && (*obj == *headPtr->data)))
+	if (!headPtr)
 	{
 		return false;
 	}
 
-	Node* temp = new Node;
-	temp->next = nullptr;
-	temp->data = new ItemType(*obj);
-
-	if (headPtr == nullptr || *temp->data < *headPtr->data)
+	if (target == *headPtr->data)
 	{
-		temp->next = headPtr;
-		headPtr = temp;
-		temp = nullptr;
+		result = target;
+		current = headPtr;
+		headPtr = headPtr->next;
+		delete current;
 		return true;
 	}
 
-	Node* current = headPtr->next;
-	Node* previous = headPtr;
-
-	while (current != nullptr && *current->data <= *temp->data)
+	previous = headPtr;
+	current = headPtr->next;
+	while (current)
 	{
+		if (target == *current->data)
+
+		{
+			result = target;
+			previous->next = current->next;
+			return true;
+		}
 		previous = current;
 		current = current->next;
 	}
-
-	if (*previous->data == *temp->data)
-	{
-		temp = nullptr;
-		delete temp;
-		return false;
-
-	}
-
-	temp->next = current;
-	previous->next = temp;
-	temp = nullptr;
-	current = nullptr;
-	previous = nullptr;
-	return true;
+	return false;
 }
 
-//template <class ItemType>
-//bool List342<ItemType>::Remove(ItemType target, ItemType& result)
-//{
-//
-//}
-//
-//template <class ItemType>
-//bool List342<ItemType>::Peek(ItemType target, ItemType& result) const
-//{
-//
-//}
-//
+// Same as remove except item is not removed from the list
+template <class ItemType>
+bool List342<ItemType>::Peek(ItemType target, ItemType& result) const
+{
+	Node* current = headPtr;
 
+	if (!current)
+	{
+		return true;
+	}
+
+	while (current)
+	{
+		if (target == *current->data)
+		{
+			result = *current->data;
+			return true;
+		}
+		current = current->next;
+	}
+	return false;
+}
+
+// checks if list is empty
 template <class ItemType>
 bool List342<ItemType>::isEmpty() const
 {
@@ -220,6 +236,7 @@ bool List342<ItemType>::isEmpty() const
 	}
 }
 
+// Remove all items from the list
 template <class ItemType>
 void List342<ItemType>::DeleteList()
 {
@@ -234,6 +251,7 @@ void List342<ItemType>::DeleteList()
 	headPtr = nullptr;
 }
 
+//  Takes a sorted list and merges into the calling sorted list 
 template <class ItemType>
 bool List342<ItemType>::Merge(List342& list1)
 {
@@ -248,8 +266,8 @@ bool List342<ItemType>::Merge(List342& list1)
 	{
 		while (thisCurrent && otherCurrent)
 		{
+			this->Insert(otherCurrent->data);
 			thisCurrent = thisCurrent->next;
-			Insert((*otherCurrent).data);
 			otherCurrent = otherCurrent->next;
 		}
 		list1.DeleteList();
@@ -257,84 +275,111 @@ bool List342<ItemType>::Merge(List342& list1)
 	}
 }
 
-//template <class ItemType>
-//List342<ItemType> List342<ItemType>::operator+(const List342& rhs)
-//{
-//
-//}
-//
-//template <class ItemType>
-//List342<ItemType> List342<ItemType>::operator+=(const List342& rhs)
-//{
-//
-//}
+// overloads + operator
+template <class ItemType>
+List342<ItemType> List342<ItemType>::operator+(const List342& rhs)
+{
+	List342<ItemType> list;
+	Node* temp;
 
+	while (temp)
+	{
+		list.Insert(temp->data);
+		temp = temp.next;
+	}
+	temp = rhs.headPtr;
+
+	while (temp)
+	{
+		list.Insert(temp->data);
+		temp = temp.next;
+	}
+	temp = nullptr;
+
+	return list;
+}
+
+// overloads += operator
+template <class ItemType>
+List342<ItemType> List342<ItemType>::operator+=(const List342& rhs)
+{
+	if (rhs.headPtr == nullptr)
+	{
+		return *this;
+	}
+	Node* current = rhs.headPtr;
+	while (current != nullptr)
+	{
+		Insert(current->data);
+		current = current->next;
+	}
+	current = nullptr;
+	return *this;
+}
+
+// checks for equality between two lists (true/false)
 template <class ItemType>
 bool List342<ItemType>::operator==(const List342& rhs)
 {
 
 	Node* current = headPtr;
-	Node* rhsNode = rhs.headPtr;
+	Node* rhsCurrent = rhs.headPtr;
 
-	while (current != nullptr && rhsNode != nullptr)
+	while (current && rhsCurrent)
 	{
-		if (current->data != rhsNode->data)
+		if (current->data != rhsCurrent->data)
 		{
 			return false;
 		}
 		current = current->next;
-		rhsNode = rhsNode->next;
+		rhsCurrent = rhsCurrent->next;
 	}
 	return true;
 }
 
-
+// checks for inequality between two lists (true/false)
 template <class ItemType>
 bool List342<ItemType>::operator!=(const List342& rhs)
 {
 	Node* current = headPtr;
-	Node* rhsNode = rhs.headPtr;
+	Node* rhsCurrent = rhs.headPtr;
 
-	while (current != nullptr && rhsNode != nullptr)
+	while (current && rhsCurrent)
 	{
-		if (current->data == rhsNode->data)
+		if (current->data == rhsCurrent->data)
 		{
 			return false;
 		}
 		current = current->next;
-		rhsNode = rhsNode->next;
+		rhsCurrent = rhsCurrent->next;
 	}
 	return true;
 
 }
-//
-//template <class ItemType>
-//List342<ItemType> List342<ItemType>::operator=(const List342& rhs)
-//{
-//
-//}
-//
 
-//template <class ItemType>
-//ostream& operator<<(ostream& output, const List342<ItemType>& outputList)
-//{
-//	List342<ItemType>::Node* traversingNode;
-//	traversingNode = outputList.headPtr;
-//
-//	if (outputList.isEmpty())
-//	{
-//		output << "List is empty!" << endl;
-//	}
-//	else
-//	{
-//		while (traversingNode) // traversingNode != nullptr (same thing)
-//		{
-//			output << *(traversingNode->data);
-//			traversingNode = traversingNode.next;
-//		}
-//	}
-//	return output;
-//}
+// Makes a deep copy of all new memory
+template <class ItemType>
+void List342<ItemType>::operator=(const List342& rhs)
+{
+	Node* rhsCurrent;
+	Node* temp;
 
+	if (this == &rhs)
+	{
+		return;
+	}
+	this->DeleteList();
+	rhsCurrent = rhs.headPtr;
+	this->headPtr = rhsCurrent;
+	temp = this->headPtr->next;
+	rhsCurrent = rhsCurrent->next;
+	while (rhsCurrent)
+	{
+		temp = rhsCurrent;
+		rhsCurrent = rhsCurrent->next;
+	}
+	return;
+}
+//
 
 #endif // !LIST342_H

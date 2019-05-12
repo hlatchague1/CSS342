@@ -12,7 +12,7 @@ class Child
 {
 public:
 	// constructors
-	Child() : firstName("Unknown"), lastName("Unknown"), age(-1) {}
+	Child() : firstName("Unknown"), lastName("Unknown"), age(0) {}
 	Child(string firstName, string lastName, int age);
 	
 	// destructor
@@ -41,9 +41,9 @@ public:
 
 private:
 	// private member variables
-	string firstName;
-	string lastName;
-	int age;
+	string firstName = "";
+	string lastName = "";
+	int age = 0;
 };
 
 #endif // !CHILD_H

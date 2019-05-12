@@ -188,6 +188,6 @@ istream& operator>>(istream& input, const Child& childInput)
 	string last = childInput.getLastName();
 	int age = childInput.getAge();
 
-	input >> first, last, age;
+	input >> first >> last >> age;
 	return input;
 }
