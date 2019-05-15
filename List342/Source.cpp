@@ -1,10 +1,12 @@
 #include "Child.h"
 #include "List342.h"
 
+using namespace std;
+
 
 int main()
 {
-	Child c1("Angie", "Ham", 7), c2("Pradnya", "Dhala", 8), c3("Bill", "Vollmann", 13), c4("Cesar", "Ruiz", 6); 
+	Child c1("Angie", "Spam", 7), c2("Pradnya", "Hello", 8), c3("Bill", "What", 13), c4("Cesar", "Ruiz", 6); 
 	Child c5("Piqi", "Tangi", 7), c6("Pete", "Rose", 13), c7("Hank", "Aaron", 3), c8("Madison", "Fife", 7); 
 	Child c9("Miles", "Davis", 65), c10("John", "Zorn", 4), c11; 
 	List342<Child> class1, class2, soccer, chess; 
@@ -82,5 +84,10 @@ int main()
 	numbers.Insert(&c); 
 	cout << "These are the numbers: " << numbers << endl; 
 	numbers.DeleteList(); 
+
+	cout << endl;
+	List342<Child> builtList;
+	builtList.BuildList("childExample.txt");
+	cout << "Sorted built list: " << builtList << endl;
 	return 0;
 }

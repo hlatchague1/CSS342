@@ -1,5 +1,7 @@
 #include "Child.h"
 
+using namespace std;
+
 
 Child::Child(string first, string last, int age)
 {
@@ -15,22 +17,27 @@ string Child::getFirstName() const
 	return firstName;
 }
 
+
+
 string Child::getLastName() const
 {
 	return lastName;
 }
+
+
 
 int Child::getAge() const
 {
 	return age;
 }
 
+
+
 bool Child::setChild(string first, string last, int age)
 {
 	firstName = first;
 	lastName = last;
 	this->age = age;
-
 	return true;
 }
 
@@ -182,12 +189,11 @@ ostream& operator<<(ostream& output, const Child& childOutput)
 	return output;
 }
 
-istream& operator>>(istream& input, const Child& childInput)
+istream& operator>>(istream& input, Child& childInput)
 {
-	string first = childInput.getFirstName(); 
-	string last = childInput.getLastName();
-	int age = childInput.getAge();
-
+	string first, last;
+	int age;
 	input >> first >> last >> age;
+	childInput.setChild(first, last, age);
 	return input;
 }

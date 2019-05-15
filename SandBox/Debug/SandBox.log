@@ -1,0 +1,4 @@
+﻿  SandBox.cpp
+C:\Users\hadas\source\repos\GIT\SandBox\SandBox.cpp(11): warning C4018: '<': signed/unsigned mismatch
+C:\Users\hadas\source\repos\GIT\SandBox\SandBox.cpp(25): warning C4018: '<=': signed/unsigned mismatch
+  SandBox.vcxproj -> C:\Users\hadas\source\repos\GIT\SandBox\Debug\SandBox.exe

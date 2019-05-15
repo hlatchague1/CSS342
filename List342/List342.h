@@ -24,7 +24,7 @@ class List342
 		{
 			while (traversingNode) // traversingNode != nullptr (same thing)
 			{
-				output << *(traversingNode->data);
+				output << *traversingNode->data;
 				traversingNode = traversingNode->next;
 			}
 		}
@@ -94,12 +94,22 @@ template <class ItemType>
 bool List342<ItemType>::BuildList(string fileName)
 {
 	ifstream inFile;
+
 	inFile.open(fileName);
-	while (!inFile.eof())
+	if (inFile.is_open())
 	{
-		ItemType* temp = new ItemType();
-		inFile >> *temp;
-		Insert(temp);
+		while (!inFile.eof())
+		{
+			ItemType* data = new ItemType();
+			inFile >> (*data);
+			Insert(data);
+			delete data;
+		}
+		inFile.close();
+	}
+	else
+	{
+		cout << "File: " << fileName << " not found." << endl;
 	}
 	return true;
 }
@@ -108,7 +118,7 @@ bool List342<ItemType>::BuildList(string fileName)
 template <class ItemType>
 bool List342<ItemType>::Insert(ItemType* obj)
 {
-	Node* temp = new Node;
+	Node* temp = new Node();
 	Node* current;
 	Node* previous;
 
