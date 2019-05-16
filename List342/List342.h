@@ -102,8 +102,11 @@ bool List342<ItemType>::BuildList(string fileName)
 		{
 			ItemType* data = new ItemType();
 			inFile >> (*data);
-			Insert(data);
-			delete data;
+			if (Insert(data) == false)
+			{
+				delete data;
+				data = nullptr;
+			}
 		}
 		inFile.close();
 	}
@@ -122,15 +125,18 @@ bool List342<ItemType>::Insert(ItemType* obj)
 	Node* current;
 	Node* previous;
 
-	temp->data = new ItemType(*obj);
+	temp->data = obj;
 
 	if (temp == nullptr)
 	{	
+		delete temp;
+		temp = nullptr;
 		return false;
 	}
+
 	if (!headPtr)
 	{
-		headPtr = temp;			
+		headPtr = temp;		
 		return true;
 	}
 
@@ -154,8 +160,8 @@ bool List342<ItemType>::Insert(ItemType* obj)
 		}
 		else if (*temp->data == *current->data)
 		{
-			temp = nullptr;
 			delete temp;
+			temp = nullptr;
 			return false;
 		}
 		previous = current;			
@@ -167,6 +173,8 @@ bool List342<ItemType>::Insert(ItemType* obj)
 		previous->next = temp;
 		return true;
 	}
+	delete temp;
+	temp = nullptr;
 	return false;
 }
 
@@ -189,6 +197,7 @@ bool List342<ItemType>::Remove(ItemType target, ItemType& result)
 		current = headPtr;
 		headPtr = headPtr->next;
 		delete current;
+		current = nullptr;
 		return true;
 	}
 
@@ -255,9 +264,12 @@ void List342<ItemType>::DeleteList()
 	while (current)
 	{
 		next = current->next;
+		//delete current;
 		current = nullptr;
 		current = next;
 	}
+	// delete current;
+	current = nullptr;
 	headPtr = nullptr;
 }
 
@@ -276,7 +288,7 @@ bool List342<ItemType>::Merge(List342& list1)
 	{
 		while (thisCurrent && otherCurrent)
 		{
-			this->Insert(otherCurrent->data);
+			Insert(otherCurrent->data);
 			thisCurrent = thisCurrent->next;
 			otherCurrent = otherCurrent->next;
 		}
@@ -295,14 +307,14 @@ List342<ItemType> List342<ItemType>::operator+(const List342& rhs)
 	while (temp)
 	{
 		list.Insert(temp->data);
-		temp = temp.next;
+		temp = temp->next;
 	}
 	temp = rhs.headPtr;
 
 	while (temp)
 	{
 		list.Insert(temp->data);
-		temp = temp.next;
+		temp = temp->next;
 	}
 	temp = nullptr;
 
@@ -318,7 +330,7 @@ List342<ItemType> List342<ItemType>::operator+=(const List342& rhs)
 		return *this;
 	}
 	Node* current = rhs.headPtr;
-	while (current != nullptr)
+	while (current)
 	{
 		Insert(current->data);
 		current = current->next;
@@ -378,9 +390,9 @@ void List342<ItemType>::operator=(const List342& rhs)
 	{
 		return;
 	}
-	this->DeleteList();
+	DeleteList();
 	rhsCurrent = rhs.headPtr;
-	this->headPtr = rhsCurrent;
+	headPtr = rhsCurrent;
 	temp = this->headPtr->next;
 	rhsCurrent = rhsCurrent->next;
 	while (rhsCurrent)

@@ -31,18 +31,33 @@ void BubbleSort(vector<int>& myVector, int pass, int length)
 }
 
 
-//void InsertionSort(vector<int>& myVector, int firstIndex, int lastIndex)
-//{
-//
-//
-//}
-//
-//void MergeSort(vector<int>& myVector, int firstIndex, int lastIndex)
-//{
-//
-//
-//}
-//
+void InsertionSort(vector<int>& myVector, int firstIndex, int length)
+{
+	int unsortedList, sortedList;
+	for (firstIndex; firstIndex <= length; firstIndex++)
+	{
+		unsortedList = myVector[firstIndex];
+		sortedList = firstIndex - 1;
+
+		while (sortedList >= 0 && myVector[sortedList] > unsortedList)
+		{
+			myVector[sortedList + 1] = myVector[sortedList];
+			sortedList = sortedList - 1;
+		}
+		myVector[sortedList + 1] = unsortedList;
+	}
+
+}
+
+void MergeSort(vector<int>& myVector, int firstIndex, int lastIndex)
+{
+	if (first < last)
+	{
+
+	}
+
+}
+
 //void IterativeMergeSort(vector<int>& myVector, int firstIndex, int lastIndex)
 //{
 //

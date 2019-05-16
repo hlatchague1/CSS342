@@ -43,9 +43,9 @@ int main(int argc, char *argv[])
 		{ 
 			BubbleSort(items, 0, size - 1);
 		}
-		else if (printArr == "MergeSort") 
+		else if (printArr == "InsertionSort") 
 		{ 
-			//MergeSort(items, 0, size - 1);
+			InsertionSort(items, 0, size - 1);
 		}
 		else
 		{ 

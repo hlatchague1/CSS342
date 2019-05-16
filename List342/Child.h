@@ -15,7 +15,7 @@ public:
 	Child() : firstName("Unknown"), lastName("Unknown"), age(0) {}
 	
 	// destructor
-	~Child();
+	~Child() = default;
 
 	// setter
 	bool setChild(string first, string last, int age);

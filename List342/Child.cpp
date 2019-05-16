@@ -2,14 +2,9 @@
 
 using namespace std;
 
-
 Child::Child(string first, string last, int age)
 {
 	setChild(first, last, age);
-}
-
-Child::~Child()
-{
 }
 
 string Child::getFirstName() const
@@ -17,21 +12,15 @@ string Child::getFirstName() const
 	return firstName;
 }
 
-
-
 string Child::getLastName() const
 {
 	return lastName;
 }
 
-
-
 int Child::getAge() const
 {
 	return age;
 }
-
-
 
 bool Child::setChild(string first, string last, int age)
 {

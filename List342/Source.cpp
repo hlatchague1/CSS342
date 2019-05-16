@@ -85,9 +85,9 @@ int main()
 	cout << "These are the numbers: " << numbers << endl; 
 	numbers.DeleteList(); 
 
-	cout << endl;
-	List342<Child> builtList;
-	builtList.BuildList("childExample.txt");
-	cout << "Sorted built list: " << builtList << endl;
+	List342<Child> myChildren;
+	myChildren.BuildList("childExample.txt");
+	cout << "Built List: " << myChildren << endl;
+
 	return 0;
 }
