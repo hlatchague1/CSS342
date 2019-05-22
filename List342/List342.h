@@ -38,7 +38,7 @@ public:
 	List342(const List342& rhs); //copy constructor
 
 	// destructor
-	~List342() { this->DeleteList(); }
+	~List342() { }
 	
 	// actions
 	bool BuildList(string fileName);
@@ -46,22 +46,24 @@ public:
 	bool Remove(ItemType target, ItemType& result);
 	bool Peek(ItemType target, ItemType& result) const;
 	bool isEmpty() const;
-
 	void DeleteList();
 	bool Merge(List342& list1);
 
 	// overloaded operators
-	List342 operator+(const List342& rhs);
-	List342 operator+=(const List342& rhs);
-	bool operator==(const List342& rhs);
-	bool operator!=(const List342& rhs);
+	List342 operator+(const List342& rhs) const;
+	void operator+=(const List342& rhs);
+	bool operator==(const List342& rhs) const;
+	bool operator!=(const List342& rhs) const;
 	void operator=(const List342& rhs);
 
 private:
 	struct Node
 	{
+	/*	Node() { data = nullptr; next = nullptr; };
+		~Node() { delete next; };*/
 		ItemType* data = nullptr;
 		Node* next = nullptr;
+	
 	};
 	Node* headPtr = nullptr;
 };
@@ -71,7 +73,6 @@ template <class ItemType>
 List342<ItemType>::List342()
 {
 	headPtr = nullptr;
-
 }
 
 // constructor
@@ -104,7 +105,7 @@ bool List342<ItemType>::BuildList(string fileName)
 			inFile >> (*data);
 			if (Insert(data) == false)
 			{
-				delete data;
+				free(data);
 				data = nullptr;
 			}
 		}
@@ -134,44 +135,49 @@ bool List342<ItemType>::Insert(ItemType* obj)
 		return false;
 	}
 
-	if (!headPtr)
+	if (headPtr == nullptr)
 	{
 		headPtr = temp;		
 		return true;
 	}
-
-	if (*temp->data < *headPtr->data)
+	else
 	{
-		temp->next = headPtr;
-		headPtr = temp;
-		return true;
-	}
 
-	current = headPtr->next;		
-	previous = headPtr;
-	   
-	while (current)
-	{		
-		if (*temp->data < *current->data)
+		if (*temp->data < *headPtr->data)
 		{
-			temp->next = current;				
+			temp->next = headPtr;
+			headPtr = temp;
+			return true;
+		}
+
+		current = headPtr->next;
+		previous = headPtr;
+
+		while (current)
+		{
+			if (*temp->data < *current->data)
+			{
+				temp->next = current;
+				previous->next = temp;
+				return true;
+			}
+			else if (*temp->data == *current->data)
+			{
+				delete temp;
+				temp = nullptr;
+				return false;
+			}
+			previous = current;
+			current = current->next;
+		}
+
+		if (previous)
+		{
 			previous->next = temp;
 			return true;
 		}
-		else if (*temp->data == *current->data)
-		{
-			delete temp;
-			temp = nullptr;
-			return false;
-		}
-		previous = current;			
-		current = current->next;
-	}
-
-	if (previous)
-	{
-		previous->next = temp;
-		return true;
+		delete temp;
+		temp = nullptr;
 	}
 	delete temp;
 	temp = nullptr;
@@ -196,8 +202,6 @@ bool List342<ItemType>::Remove(ItemType target, ItemType& result)
 		result = target;
 		current = headPtr;
 		headPtr = headPtr->next;
-		delete current;
-		current = nullptr;
 		return true;
 	}
 
@@ -264,11 +268,9 @@ void List342<ItemType>::DeleteList()
 	while (current)
 	{
 		next = current->next;
-		//delete current;
-		current = nullptr;
+		delete current;
 		current = next;
 	}
-	// delete current;
 	current = nullptr;
 	headPtr = nullptr;
 }
@@ -280,7 +282,7 @@ bool List342<ItemType>::Merge(List342& list1)
 	Node* thisCurrent = headPtr;
 	Node* otherCurrent = list1.headPtr;
 
-	if ((thisCurrent == nullptr && otherCurrent == nullptr) || (*this == list1))
+	if (*this == list1)
 	{
 		return false;
 	}
@@ -299,7 +301,7 @@ bool List342<ItemType>::Merge(List342& list1)
 
 // overloads + operator
 template <class ItemType>
-List342<ItemType> List342<ItemType>::operator+(const List342& rhs)
+List342<ItemType> List342<ItemType>::operator+(const List342& rhs) const
 {
 	List342<ItemType> list;
 	Node* temp;
@@ -323,25 +325,25 @@ List342<ItemType> List342<ItemType>::operator+(const List342& rhs)
 
 // overloads += operator
 template <class ItemType>
-List342<ItemType> List342<ItemType>::operator+=(const List342& rhs)
+void List342<ItemType>::operator+=(const List342& rhs)
 {
-	if (rhs.headPtr == nullptr)
+	Node* current;
+	if (!rhs.headPtr)
 	{
-		return *this;
+		return;
 	}
-	Node* current = rhs.headPtr;
+	
+	current = rhs.headPtr;
 	while (current)
 	{
 		Insert(current->data);
 		current = current->next;
 	}
-	current = nullptr;
-	return *this;
 }
 
 // checks for equality between two lists (true/false)
 template <class ItemType>
-bool List342<ItemType>::operator==(const List342& rhs)
+bool List342<ItemType>::operator==(const List342& rhs) const
 {
 
 	Node* current = headPtr;
@@ -361,7 +363,7 @@ bool List342<ItemType>::operator==(const List342& rhs)
 
 // checks for inequality between two lists (true/false)
 template <class ItemType>
-bool List342<ItemType>::operator!=(const List342& rhs)
+bool List342<ItemType>::operator!=(const List342& rhs) const
 {
 	Node* current = headPtr;
 	Node* rhsCurrent = rhs.headPtr;
